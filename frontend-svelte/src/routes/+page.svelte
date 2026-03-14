@@ -20,21 +20,16 @@
 	async function requestFaucet() {
 		faucetLoading = true; faucetMsg = '';
 		try {
-			// Use boarding address if available, otherwise ask backend to generate one
+			// Get a fresh address from the regtest node
 			let addr = ws.boardingAddress;
 			if (!addr) {
-				// No SDK wallet — use pubkey to get a regtest address from backend
-				faucetMsg = 'No boarding address available. Getting one from server...';
-				const res = await fetch(`${getApiUrl()}/faucet/address?pubkey=${ws.publicKey}`, {
-					headers: { 'Origin': window.location.origin },
-				});
-				if (res.ok) {
-					const data = await res.json();
-					addr = data.address;
+				const addrRes = await fetch(`${getApiUrl()}/faucet/address`);
+				if (addrRes.ok) {
+					addr = (await addrRes.json()).address;
 				}
 			}
 			if (!addr) {
-				faucetMsg = 'Could not get a funding address. Try refreshing.';
+				faucetMsg = 'Could not get a funding address.';
 				faucetLoading = false;
 				return;
 			}

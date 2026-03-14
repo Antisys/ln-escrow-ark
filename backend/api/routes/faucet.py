@@ -25,20 +25,26 @@ class FaucetResponse(BaseModel):
 
 @router.get("/faucet/address")
 async def faucet_address():
-    """Get a regtest address for faucet funding (uses Bitcoin Core getnewaddress)."""
+    """Get a fresh regtest address from the Bitcoin node."""
     if os.getenv("MOCK_PAYMENTS", "").lower() != "true":
         raise HTTPException(status_code=403, detail="Only in regtest mode")
     try:
         import httpx
         async with httpx.AsyncClient(timeout=10) as client:
-            # Get a new address from the Bitcoin node via chopsticks
-            resp = await client.get("http://chopsticks:3000/getnewaddress")
+            resp = await client.post(
+                "http://bitcoin:18443",
+                json={"jsonrpc": "1.0", "method": "getnewaddress", "params": []},
+                auth=("admin1", "123"),
+            )
             if resp.status_code == 200:
-                return {"address": resp.text.strip().strip('"')}
-            # Fallback: use a known regtest address
-            return {"address": "bcrt1qgqsguk5wqe0rzrfhqmfsdmflag4z7rzvlg7f5y"}
-    except Exception:
-        return {"address": "bcrt1qgqsguk5wqe0rzrfhqmfsdmflag4z7rzvlg7f5y"}
+                addr = resp.json().get("result", "")
+                if addr:
+                    return {"address": addr}
+        raise HTTPException(status_code=502, detail="Could not get address from node")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Node unreachable: {e}")
 
 
 @router.post("/faucet", response_model=FaucetResponse)
