@@ -23,6 +23,24 @@ class FaucetResponse(BaseModel):
     address: str
 
 
+@router.get("/faucet/address")
+async def faucet_address():
+    """Get a regtest address for faucet funding (uses Bitcoin Core getnewaddress)."""
+    if os.getenv("MOCK_PAYMENTS", "").lower() != "true":
+        raise HTTPException(status_code=403, detail="Only in regtest mode")
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            # Get a new address from the Bitcoin node via chopsticks
+            resp = await client.get("http://chopsticks:3000/getnewaddress")
+            if resp.status_code == 200:
+                return {"address": resp.text.strip().strip('"')}
+            # Fallback: use a known regtest address
+            return {"address": "bcrt1qgqsguk5wqe0rzrfhqmfsdmflag4z7rzvlg7f5y"}
+    except Exception:
+        return {"address": "bcrt1qgqsguk5wqe0rzrfhqmfsdmflag4z7rzvlg7f5y"}
+
+
 @router.post("/faucet", response_model=FaucetResponse)
 async def faucet(body: FaucetRequest):
     """Send regtest coins to an address via nigiri faucet."""

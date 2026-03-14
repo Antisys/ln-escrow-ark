@@ -18,22 +18,41 @@
 	}
 
 	async function requestFaucet() {
-		if (!ws.boardingAddress) return;
 		faucetLoading = true; faucetMsg = '';
 		try {
-			// Call backend to trigger nigiri faucet (regtest only)
+			// Use boarding address if available, otherwise ask backend to generate one
+			let addr = ws.boardingAddress;
+			if (!addr) {
+				// No SDK wallet — use pubkey to get a regtest address from backend
+				faucetMsg = 'No boarding address available. Getting one from server...';
+				const res = await fetch(`${getApiUrl()}/faucet/address?pubkey=${ws.publicKey}`, {
+					headers: { 'Origin': window.location.origin },
+				});
+				if (res.ok) {
+					const data = await res.json();
+					addr = data.address;
+				}
+			}
+			if (!addr) {
+				faucetMsg = 'Could not get a funding address. Try refreshing.';
+				faucetLoading = false;
+				return;
+			}
+
 			const res = await fetch(`${getApiUrl()}/faucet`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ address: ws.boardingAddress, amount_sats: 100000 }),
+				body: JSON.stringify({ address: addr, amount_sats: 100000 }),
 			});
 			if (res.ok) {
-				faucetMsg = 'Sent 100,000 sats! Wait ~10s for confirmation.';
+				const data = await res.json();
+				faucetMsg = `Sent 100,000 sats! TX: ${data.txid.slice(0, 12)}...`;
 				setTimeout(refreshBalance, 12000);
 			} else {
-				faucetMsg = 'Faucet unavailable (regtest only)';
+				const err = await res.json().catch(() => ({}));
+				faucetMsg = err.detail || 'Faucet unavailable';
 			}
-		} catch { faucetMsg = 'Faucet unavailable'; }
+		} catch (e) { faucetMsg = `Faucet error: ${e.message}`; }
 		faucetLoading = false;
 	}
 
