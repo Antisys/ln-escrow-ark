@@ -16,7 +16,7 @@
 </script>
 
 <nav class="wallet-bar">
-	<a href="/" class="brand">{APP_NAME}</a>
+	<a href="/" class="brand"><img src="/logo.svg" alt="" class="logo" />{APP_NAME}</a>
 	{#if ws.initialized && !ws.locked}
 		<div class="wallet-info">
 			<span class="balance">{formatSats(ws.balance.total)} sats</span>
@@ -28,7 +28,8 @@
 
 <style>
 	.wallet-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: #111; border-bottom: 1px solid #222; }
-	.brand { color: #f7931a; font-weight: bold; font-size: 1.1rem; text-decoration: none; }
+	.brand { color: #f7931a; font-weight: bold; font-size: 1.1rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+	.logo { width: 28px; height: 28px; }
 	.wallet-info { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; }
 	.balance { color: #4ecdc4; font-weight: bold; }
 	.pubkey { color: #666; font-family: monospace; }

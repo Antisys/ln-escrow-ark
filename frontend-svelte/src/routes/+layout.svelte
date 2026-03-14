@@ -4,6 +4,7 @@
 </script>
 
 <svelte:head>
+	<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 	<title>Arkana</title>
 </svelte:head>
 

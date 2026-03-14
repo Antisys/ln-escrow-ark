@@ -9,6 +9,7 @@
 	<WalletSetup />
 {:else}
 	<div class="home">
+		<img src="/logo.svg" alt="Arkana" class="home-logo" />
 		<h2>Arkana</h2>
 		<p>Non-custodial Bitcoin escrow powered by Ark Protocol.</p>
 
@@ -38,6 +39,7 @@
 
 <style>
 	.home { text-align: center; padding-top: 2rem; }
+	.home-logo { width: 80px; height: 80px; margin-bottom: 0.5rem; }
 	h2 { color: #f7931a; margin-bottom: 0.25rem; }
 	.balance-card { background: #151515; border: 1px solid #222; border-radius: 12px; padding: 1.5rem; margin: 2rem 0; }
 	.balance-label { color: #888; font-size: 0.85rem; text-transform: uppercase; }

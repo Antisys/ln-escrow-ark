@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f7931a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6b00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4ecdc4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shield" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a14;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#f7931a" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Outer circle — mystical ring -->
+  <circle cx="100" cy="100" r="92" stroke="url(#glow)" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <circle cx="100" cy="100" r="85" stroke="url(#glow)" stroke-width="0.5" fill="none" opacity="0.3"/>
+
+  <!-- Shield shape — escrow protection -->
+  <path d="M100 25 L155 55 L155 110 C155 145 130 170 100 185 C70 170 45 145 45 110 L45 55 Z"
+        fill="url(#shield)" stroke="url(#glow)" stroke-width="2" filter="url(#shadow)"/>
+
+  <!-- Ark symbol — upward triangle/pyramid -->
+  <path d="M100 58 L135 120 L65 120 Z"
+        fill="none" stroke="#f7931a" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Inner triangle — nested depth -->
+  <path d="M100 75 L122 110 L78 110 Z"
+        fill="none" stroke="#4ecdc4" stroke-width="1.5" stroke-linejoin="round" opacity="0.8"/>
+
+  <!-- Bitcoin ₿ in center -->
+  <text x="100" y="104" text-anchor="middle" font-family="monospace" font-size="22" font-weight="bold" fill="#f7931a">₿</text>
+
+  <!-- Lock keyhole — escrow locked -->
+  <circle cx="100" cy="135" r="6" fill="none" stroke="#4ecdc4" stroke-width="1.5"/>
+  <line x1="100" y1="138" x2="100" y2="148" stroke="#4ecdc4" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Three dots — 3-party (buyer, seller, escrow) -->
+  <circle cx="75" cy="48" r="3" fill="#f7931a" opacity="0.8"/>
+  <circle cx="100" cy="38" r="3" fill="#4ecdc4" opacity="0.8"/>
+  <circle cx="125" cy="48" r="3" fill="#f7931a" opacity="0.8"/>
+
+  <!-- Sparkle accents -->
+  <circle cx="160" cy="70" r="1.5" fill="#4ecdc4" opacity="0.6"/>
+  <circle cx="40" cy="70" r="1.5" fill="#4ecdc4" opacity="0.6"/>
+  <circle cx="100" cy="190" r="1.5" fill="#f7931a" opacity="0.4"/>
+</svg>
