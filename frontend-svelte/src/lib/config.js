@@ -11,7 +11,7 @@ export function getApiUrl() {
 export function getArkServerUrl() {
 	if (typeof window === 'undefined') return '';
 	const host = window.location.hostname;
-	if (host === 'ark.trustbro.trade') return 'https://ark.trustbro.trade/v1';
+	if (host === 'ark.trustbro.trade') return 'https://ark.trustbro.trade';
 	if (host === 'localhost') return 'http://localhost:7070';
 	return `${window.location.protocol}//${host}:7070`;
 }
