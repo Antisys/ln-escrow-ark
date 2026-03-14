@@ -41751,7 +41751,7 @@ const Bb = {
   testnet: "https://mempool.space/testnet/api",
   signet: "https://mempool.space/signet/api",
   mutinynet: "https://mutinynet.com/api",
-  regtest: "http://localhost:3000"
+  regtest: "https://ark.trustbro.trade/esplora"
 };
 class bb {
   constructor(a, l) {
