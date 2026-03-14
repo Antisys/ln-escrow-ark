@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import { walletStore } from '$lib/stores/wallet.js';
 	import { getPublicKey, signMessage, sendToAddress, sha256Hash, isUnlocked } from '$lib/ark-wallet.js';
+	import { getApiUrl } from '$lib/config.js';
 
 	// Generate a random secret code for this deal (stored in browser only)
 	function getOrCreateSecretCode() {
@@ -156,6 +157,32 @@
 		loading = false;
 	}
 
+	// ── Buyer: Fund via regtest faucet (sends directly to escrow address) ──
+	async function handleFaucetFund() {
+		if (!escrowAddress) { error = 'Create escrow first'; return; }
+		loading = true; error = ''; success = '';
+		try {
+			const res = await fetch(`${getApiUrl()}/faucet`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ address: escrowAddress, amount_sats: deal.price_sats }),
+			});
+			if (res.ok) {
+				const data = await res.json();
+				const code = getOrCreateSecretCode();
+				const hash = sha256Hash(code);
+				await confirmFunding(dealId, data.txid, 0, hash);
+				secretCode = code;
+				success = `Funded! TX: ${data.txid.slice(0, 12)}... Secret code: ${code}`;
+				await loadDeal();
+			} else {
+				const err = await res.json().catch(() => ({}));
+				error = err.detail || 'Faucet failed';
+			}
+		} catch (e) { error = e.message; }
+		loading = false;
+	}
+
 	function copyText(text) {
 		navigator.clipboard.writeText(text).then(() => { success = 'Copied!'; setTimeout(() => success = '', 2000); });
 	}
@@ -221,11 +248,14 @@
 				<p class="hint">Click to copy. This is a P2TR tapscript address.</p>
 
 				<div class="fund-options">
-					<button onclick={handleFundViaWallet} disabled={loading} class="primary">
-						{loading ? 'Sending...' : 'Fund from Ark Wallet'}
+					<button onclick={handleFaucetFund} disabled={loading} class="primary">
+						{loading ? 'Funding...' : `Fund ${deal.price_sats?.toLocaleString()} sats (Regtest Faucet)`}
+					</button>
+					<button onclick={handleFundViaWallet} disabled={loading} class="secondary">
+						Fund from Ark Wallet
 					</button>
 					<details>
-						<summary>Manual funding (CLI/regtest)</summary>
+						<summary>Manual funding (CLI)</summary>
 						<input type="text" bind:value={manualTxid} placeholder="VTXO txid after sending" />
 						<button onclick={handleManualFund} disabled={loading} class="secondary">Confirm Manual Funding</button>
 					</details>
