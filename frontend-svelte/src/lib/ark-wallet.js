@@ -73,10 +73,12 @@ export async function unlockWallet(password) {
 	publicKeyHex = hex.encode(pubBytes);
 	_privHex = privHexStr;
 
-	// Optionally initialize Ark SDK ServiceWorkerWallet
-	await _initSdkWallet(privHexStr).catch((e) => {
-		console.warn('Ark SDK wallet init skipped (non-fatal):', e.message);
-	});
+	// Initialize Ark SDK ServiceWorkerWallet
+	try {
+		await _initSdkWallet(privHexStr);
+	} catch (e) {
+		console.error('Ark SDK wallet init FAILED:', e.message, e.stack);
+	}
 
 	return true;
 }
@@ -236,12 +238,16 @@ async function _initSdkWallet(privHexStr) {
 	const { ServiceWorkerWallet, SingleKey } = await import('@arkade-os/sdk');
 	const identity = SingleKey.fromHex(privHexStr);
 
+	console.log('SDK init: arkServerUrl=', getArkServerUrl(), 'esploraUrl=', getEsploraUrl());
 	wallet = await ServiceWorkerWallet.setup({
 		serviceWorkerPath: '/ark-service-worker.mjs',
 		identity,
 		arkServerUrl: getArkServerUrl(),
 		esploraUrl: getEsploraUrl(),
+		serviceWorkerActivationTimeoutMs: 30000,
+		messageBusTimeoutMs: 30000,
 	});
+	console.log('SDK wallet initialized successfully');
 }
 
 // ═══════════════════════════════════════════════════════════
