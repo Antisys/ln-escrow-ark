@@ -1,0 +1,27 @@
+# Web Framework
+fastapi==0.109.0
+uvicorn==0.27.0
+pydantic==2.5.3
+
+# Database
+sqlalchemy==2.0.25
+alembic==1.13.1
+
+# HTTP / Networking
+requests==2.31.0
+httpx>=0.25.0
+
+# Lightning
+pyln-client==24.8.1
+
+# Crypto
+secp256k1>=0.14.0
+coincurve>=0.18.0
+bech32>=1.2.0
+ecdsa>=0.18.0
+
+# Utilities
+python-dotenv==1.0.0
+click==8.1.7
+tabulate==0.9.0
+qrcode>=7.0.0

@@ -1,0 +1,7 @@
+# Add these entries to /etc/cloudflared/config.yml under ingress:
+# (before the catch-all 404 rule)
+
+  - hostname: trustbro.trade
+    service: http://localhost:80
+  - hostname: k9f2.trustbro.trade
+    service: http://localhost:8001

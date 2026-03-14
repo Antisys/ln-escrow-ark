@@ -1,0 +1,14 @@
+[Unit]
+Description=SSH tunnel to remote LND REST API
+After=network.target
+
+[Service]
+Type=simple
+User=ralf
+# Adjust: user@host and local/remote ports for your LND setup
+ExecStart=/usr/bin/ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ExitOnForwardFailure=yes -NL 8080:127.0.0.1:8080 user@lnd-host
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

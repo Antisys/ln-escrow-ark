@@ -1,0 +1,138 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Database & Data
+*.db
+*.sqlite
+*.sqlite3
+data/cli_escrows.json
+
+# Wallet & Credentials (SENSITIVE!)
+data/lnd/
+data/testnet_wallet/
+*.macaroon
+*.macaroon.*
+*.key
+
+# Logs
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+!frontend/src/lib/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv/
+ENV/
+env/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Node.js / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend-svelte/node_modules/
+frontend-svelte/.svelte-kit/
+frontend-svelte/build/
+.npm
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# Lightning vendored source (too large, 4.8GB)
+/lightning/
+
+# Production secrets (use .env.production.template as reference)
+deploy/.env.production
+
+# Mainnet wallet keys
+data/mainnet_wallet/
+
+# Claude Code workspace
+.claude/
+
+# Nix/Cargo build artifacts
+target-nix/
+
+# Playwright test output
+frontend-svelte/test-results/
+
+# Oracle dev keys (NEVER commit private keys)
+.oracle-dev-keys
+
+# Session state (contains server IPs)
+.claude-session-state.json
+
+# Planning docs (local only)
+ln-escrow-project-description.md
+offline-recipient-solution.md
+
+# Root package-lock (stale artifact)
+/package-lock.json
+
+# PDF docs (too large for git, regenerate from .md)
+*.pdf
+
+# Testnet env (stale)
+.env.testnet
+
+# Data settings
+data/settings.json
+
+# Test screenshots
+frontend-svelte/tests/e2e/screenshots/
+
+# Dead Liquid-era code (kept locally for reference)
+/packages/
+/backend/vault/
+/backend/models/
+MIGRATION.md
+PLAN_UI_SIMPLIFICATION.md
+SECURITY_REPORT.md
+*.db
+venv/
+node_modules/
+__pycache__/
+.env
