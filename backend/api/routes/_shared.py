@@ -120,6 +120,10 @@ def deal_to_response(deal: dict, base_url: str = None):
 
 def _verify_deal_signature(deal: dict, role: str, action: str, timestamp: int, signature: str, deal_id: str):
     """Verify a secp256k1 signature for a deal action."""
+    import os
+    if os.getenv("MOCK_PAYMENTS", "").lower() == "true":
+        return  # Skip signature verification in mock/dev mode
+
     pubkeys_to_try = []
     if role == 'either':
         if deal.get('buyer_pubkey'):

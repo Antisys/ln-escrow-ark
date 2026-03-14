@@ -49,6 +49,7 @@ class CreateEscrowResponse(BaseModel):
 class ConfirmFundingRequest(BaseModel):
     vtxo_txid: str
     vtxo_vout: int = 0
+    secret_code_hash: Optional[str] = None  # SHA256(secret_code) from buyer
 
 
 class ConfirmFundingResponse(BaseModel):
@@ -161,11 +162,13 @@ async def confirm_funding(deal_id: str, body: ConfirmFundingRequest):
     # Mark deal as funded
     from backend.database.deal_storage import set_deal_funded
     set_deal_funded(deal_id)
-    deal_storage.update_deal(
-        deal_id=deal_id,
+    update_fields = dict(
         ark_vtxo_txid=body.vtxo_txid,
         ark_vtxo_vout=body.vtxo_vout,
     )
+    if body.secret_code_hash:
+        update_fields['ark_secret_code_hash'] = body.secret_code_hash
+    deal_storage.update_deal(deal_id=deal_id, **update_fields)
 
     logger.info("Deal %s funded: vtxo=%s:%d", deal_id, body.vtxo_txid, body.vtxo_vout)
 

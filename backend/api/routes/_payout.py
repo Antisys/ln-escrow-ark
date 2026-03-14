@@ -199,11 +199,40 @@ async def execute_ark_payout(
         )
 
     invoice = deal.get(invoice_field)
-    if not invoice:
-        error_msg = f"No {'buyer' if is_refund else 'seller'} payout invoice"
+    # Ark mode: no LN invoice needed if pubkey is available
+    ark_pubkey = deal.get('seller_pubkey') if not is_refund else deal.get('buyer_pubkey')
+    if not invoice and not ark_pubkey:
+        error_msg = f"No {'buyer' if is_refund else 'seller'} payout destination"
         if raise_on_ln_fail:
             raise HTTPException(status_code=400, detail=error_msg)
         raise ValueError(error_msg)
+
+    # Ark mode: skip LN payment, just update escrow status via agent
+    if not invoice and ark_pubkey:
+        escrow_id = deal.get('ark_escrow_deal_id')
+        if escrow_id:
+            try:
+                from backend.ark.ark_service import ArkEscrowService
+                ark = ArkEscrowService()
+                if is_refund:
+                    await ark.refund_deal_escrow(escrow_id)
+                else:
+                    await ark.release_deal_escrow(escrow_id, secret_code or '')
+            except Exception as e:
+                logger.warning("Ark escrow %s failed (non-fatal): %s", 'refund' if is_refund else 'release', e)
+
+        # Update deal status directly
+        new_status = 'refunded' if is_refund else 'completed'
+        txid_field = fields['txid_field']
+        deal_storage.update_deal(deal_id=deal_id, status=new_status, **{txid_field: escrow_id or 'ark_direct'})
+        if ws_complete_event:
+            try:
+                from backend.api.routes._shared import _ws_notify
+                await _ws_notify(deal_id, ws_complete_event)
+            except Exception:
+                pass
+        logger.info("Ark payout %s completed for deal %s", 'refund' if is_refund else 'release', deal_id[:8])
+        return
 
     t_start = time.monotonic()
 

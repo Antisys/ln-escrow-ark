@@ -70,8 +70,9 @@ async def release_deal(deal_id: str, body: ReleaseDealRequest):
     if not deal.get('ark_escrow_deal_id'):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Deal has no Ark escrow yet")
 
-    if not deal.get('seller_payout_invoice'):
-        raise HTTPException(status_code=400, detail="Seller has not submitted a payout invoice yet")
+    # In Ark mode, seller_pubkey is the payout destination (no LN invoice needed)
+    if not deal.get('seller_payout_invoice') and not deal.get('seller_pubkey'):
+        raise HTTPException(status_code=400, detail="Seller has no payout destination")
 
     # COIN SAFETY: block if a refund already claimed the escrow
     if deal.get('refund_txid'):

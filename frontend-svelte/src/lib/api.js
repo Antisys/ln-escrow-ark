@@ -78,10 +78,10 @@ export async function createEscrow(dealId, buyerPubkey) {
 	return request(`/deals/${dealId}/create-escrow`, { method: 'POST' });
 }
 
-export async function confirmFunding(dealId, vtxoTxid, vtxoVout) {
+export async function confirmFunding(dealId, vtxoTxid, vtxoVout, secretCodeHash) {
 	return request(`/deals/${dealId}/confirm-funding`, {
 		method: 'POST',
-		body: JSON.stringify({ vtxo_txid: vtxoTxid, vtxo_vout: vtxoVout }),
+		body: JSON.stringify({ vtxo_txid: vtxoTxid, vtxo_vout: vtxoVout, secret_code_hash: secretCodeHash }),
 	});
 }
 

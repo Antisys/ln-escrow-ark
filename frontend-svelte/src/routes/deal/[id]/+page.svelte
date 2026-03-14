@@ -2,6 +2,17 @@
 	import { page } from '$app/state';
 	import { walletStore } from '$lib/stores/wallet.js';
 	import { getPublicKey, signMessage, sendToAddress, sha256Hash, isUnlocked } from '$lib/ark-wallet.js';
+
+	// Generate a random secret code for this deal (stored in browser only)
+	function getOrCreateSecretCode() {
+		const key = `arkana_secret_${dealId}`;
+		let code = localStorage.getItem(key);
+		if (!code) {
+			code = crypto.randomUUID().replace(/-/g, '');
+			localStorage.setItem(key, code);
+		}
+		return code;
+	}
 	import { getDeal, createEscrow, confirmFunding, releaseDeal, refundDeal, shipDeal, disputeDeal } from '$lib/api.js';
 	import StatusBadge from '$lib/components/StatusBadge.svelte';
 	import WalletSetup from '$lib/components/WalletSetup.svelte';
@@ -64,9 +75,12 @@
 	async function handleFundViaWallet() {
 		loading = true; error = ''; success = '';
 		try {
+			const code = getOrCreateSecretCode();
+			const hash = sha256Hash(code);
 			const txid = await sendToAddress(escrowAddress, deal.price_sats);
-			await confirmFunding(dealId, txid, 0);
-			success = 'Deal funded!';
+			await confirmFunding(dealId, txid, 0, hash);
+			success = 'Deal funded! Your secret code: ' + code;
+			secretCode = code; // Pre-fill for release
 			await loadDeal();
 		} catch (e) {
 			error = `Wallet send failed: ${e.message}. You can fund manually via CLI.`;
@@ -80,8 +94,11 @@
 		if (!manualTxid) { error = 'Enter VTXO txid'; return; }
 		loading = true; error = ''; success = '';
 		try {
-			await confirmFunding(dealId, manualTxid, 0);
-			success = 'Funding confirmed!';
+			const code = getOrCreateSecretCode();
+			const hash = sha256Hash(code);
+			await confirmFunding(dealId, manualTxid, 0, hash);
+			success = 'Funding confirmed! Your secret code: ' + code;
+			secretCode = code;
 			await loadDeal();
 		} catch (e) { error = e.message; }
 		loading = false;
