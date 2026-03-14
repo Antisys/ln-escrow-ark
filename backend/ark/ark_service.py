@@ -165,6 +165,7 @@ class ArkEscrowService:
         timeout_action: str,
         seller_pubkey: str,
         buyer_pubkey: str,
+        **kwargs,
     ) -> dict:
         """
         Create escrow deal + return info for LN invoice creation.

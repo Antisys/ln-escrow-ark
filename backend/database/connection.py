@@ -52,7 +52,11 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():
     """Initialize database — run Alembic migrations, fall back to create_all."""
-    _run_migrations()
+    import os
+    if not os.getenv("SKIP_ALEMBIC"):
+        _run_migrations()
+    else:
+        logger.info("SKIP_ALEMBIC set — skipping Alembic migrations")
 
 
 def _run_migrations():

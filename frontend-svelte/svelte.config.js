@@ -4,8 +4,15 @@ import adapter from '@sveltejs/adapter-static';
 const config = {
 	kit: {
 		adapter: adapter({
-			fallback: '200.html'
+			pages: 'build',
+			assets: 'build',
+			fallback: '200.html',
+			precompress: false,
 		})
+	},
+	vitePlugin: {
+		dynamicCompileOptions: ({ filename }) =>
+			filename.includes('node_modules') ? undefined : { runes: true }
 	}
 };
 
