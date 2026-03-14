@@ -9,7 +9,7 @@
 	<WalletSetup />
 {:else}
 	<div class="home">
-		<h2>trustMeBro-ARK</h2>
+		<h2>Arkana</h2>
 		<p>Non-custodial Bitcoin escrow powered by Ark Protocol.</p>
 
 		<div class="balance-card">

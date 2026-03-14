@@ -25,5 +25,5 @@ export function getEsploraUrl() {
 	return `${window.location.protocol}//${host}:3000`;
 }
 
-export const APP_NAME = 'trustMeBro-ARK';
+export const APP_NAME = 'Arkana';
 export const DEFAULT_PASSWORD = 'noah'; // dev default, user sets own in production

@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>trustMeBro-ARK</title>
+	<title>Arkana</title>
 </svelte:head>
 
 <WalletBar />
