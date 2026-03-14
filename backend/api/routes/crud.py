@@ -88,7 +88,9 @@ async def create_deal(request: Request, body: CreateDealRequest):
             timeout_hours=body.timeout_hours,
             timeout_action=body.timeout_action,
             requires_tracking=body.requires_tracking,
-            recovery_contact=strip_html_tags(body.recovery_contact) if body.recovery_contact else None
+            recovery_contact=strip_html_tags(body.recovery_contact) if body.recovery_contact else None,
+            seller_pubkey=body.seller_pubkey,
+            buyer_pubkey=body.buyer_pubkey,
         )
 
         return deal_to_response(deal)

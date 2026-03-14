@@ -37,7 +37,9 @@ def create_deal(
     timeout_hours: int = 72,
     timeout_action: str = 'refund',
     requires_tracking: bool = False,
-    recovery_contact: str = None
+    recovery_contact: str = None,
+    seller_pubkey: str = None,
+    buyer_pubkey: str = None,
 ) -> dict:
     """
     Create a new deal
@@ -67,6 +69,8 @@ def create_deal(
         requires_tracking=requires_tracking,
         seller_recovery_contact=recovery_contact if creator_role == 'seller' else None,
         buyer_recovery_contact=recovery_contact if creator_role == 'buyer' else None,
+        seller_pubkey=seller_pubkey,
+        buyer_pubkey=buyer_pubkey,
         status=DealStatus.PENDING.value,
         created_at=datetime.now(timezone.utc)
     )

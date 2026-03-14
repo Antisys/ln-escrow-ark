@@ -135,9 +135,11 @@ class DealModel(Base):
 
     # Ark escrow
     ark_escrow_deal_id = Column(String(100), nullable=True, index=True)
+    ark_escrow_address = Column(String(200), nullable=True)  # P2TR escrow VTXO address
+    ark_vtxo_txid = Column(String(100), nullable=True)       # Funded VTXO txid
+    ark_vtxo_vout = Column(Integer, nullable=True)            # Funded VTXO vout
     # NOTE: ark_secret_code column REMOVED — non-custodial invariant.
     # Plaintext secret_code is NEVER stored in DB. Only the hash is kept.
-    # See _payout.py:_secret_code_cache for the in-memory delivery mechanism.
     ark_timeout_block = Column(Integer, nullable=True) # Bitcoin block height for timeout
 
     # Non-custodial: buyer's ephemeral key used as buyer_pubkey in Ark escrow
@@ -213,6 +215,9 @@ class DealModel(Base):
             'refund_txid': self.refund_txid,
             # Ark escrow
             'ark_escrow_deal_id': self.ark_escrow_deal_id,
+            'ark_escrow_address': self.ark_escrow_address,
+            'ark_vtxo_txid': self.ark_vtxo_txid,
+            'ark_vtxo_vout': self.ark_vtxo_vout,
             'ark_timeout_block': self.ark_timeout_block,
             'buyer_escrow_pubkey': self.buyer_escrow_pubkey,
             'buyer_timeout_signature': self.buyer_timeout_signature,

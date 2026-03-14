@@ -107,7 +107,12 @@ def deal_to_response(deal: dict, base_url: str = None):
         payout_status=deal.get('payout_status'),
         has_buyer_payout_invoice=bool(deal.get('buyer_payout_invoice')),
         buyer_payout_status=deal.get('buyer_payout_status'),
+        buyer_pubkey=deal.get('buyer_pubkey'),
+        seller_pubkey=deal.get('seller_pubkey'),
         ark_escrow_deal_id=deal.get('ark_escrow_deal_id'),
+        ark_escrow_address=deal.get('ark_escrow_address'),
+        ark_vtxo_txid=deal.get('ark_vtxo_txid'),
+        ark_vtxo_vout=deal.get('ark_vtxo_vout'),
         ark_timeout_block=deal.get('ark_timeout_block'),
         buyer_escrow_pubkey=deal.get('buyer_escrow_pubkey'),
     )
@@ -165,6 +170,8 @@ class CreateDealRequest(BaseModel):
     seller_name: Optional[str] = Field(None, max_length=100)
     buyer_id: Optional[str] = Field(None, min_length=1, max_length=100)
     buyer_name: Optional[str] = Field(None, max_length=100)
+    seller_pubkey: Optional[str] = Field(None, max_length=66, description="Seller's Ark wallet pubkey (hex)")
+    buyer_pubkey: Optional[str] = Field(None, max_length=66, description="Buyer's Ark wallet pubkey (hex)")
     title: str = Field(..., min_length=1, max_length=200)
     description: Optional[str] = Field(None, max_length=2000)
     price_sats: int = Field(..., gt=0, description="Amount in satoshis")
@@ -312,7 +319,12 @@ class DealResponse(BaseModel):
     payout_status: Optional[str] = None
     has_buyer_payout_invoice: bool = False
     buyer_payout_status: Optional[str] = None
+    buyer_pubkey: Optional[str] = None
+    seller_pubkey: Optional[str] = None
     ark_escrow_deal_id: Optional[str] = None
+    ark_escrow_address: Optional[str] = None
+    ark_vtxo_txid: Optional[str] = None
+    ark_vtxo_vout: Optional[int] = None
     ark_timeout_block: Optional[int] = None
     buyer_escrow_pubkey: Optional[str] = None
 
