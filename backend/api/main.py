@@ -25,7 +25,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from dotenv import load_dotenv
 
 from backend.api.routes import health, deals, qr, websockets
-from backend.api.routes import ark_escrow
+from backend.api.routes import ark_escrow, faucet
 try:
     from backend.api.routes import auth
 except ImportError:
@@ -145,6 +145,7 @@ async def validation_exception_handler(request: FastAPIRequest, exc: RequestVali
 app.include_router(health.router, tags=["Health"])
 app.include_router(deals.router, prefix="/deals", tags=["Deals"])
 app.include_router(ark_escrow.router, prefix="/deals", tags=["Ark Escrow"])
+app.include_router(faucet.router, tags=["Faucet"])
 if auth:
     app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(qr.router, tags=["QR"])

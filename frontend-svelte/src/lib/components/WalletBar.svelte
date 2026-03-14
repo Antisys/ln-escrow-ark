@@ -28,8 +28,8 @@
 
 <style>
 	.wallet-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: #111; border-bottom: 1px solid #222; }
-	.brand { color: #f7931a; font-weight: bold; font-size: 1.1rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
-	.logo { width: 28px; height: 28px; }
+	.brand { color: #0099ff; font-weight: bold; font-size: 1.1rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+	.logo { width: 42px; height: 42px; }
 	.wallet-info { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; }
 	.balance { color: #4ecdc4; font-weight: bold; }
 	.pubkey { color: #666; font-family: monospace; }
