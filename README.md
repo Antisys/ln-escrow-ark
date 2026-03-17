@@ -77,4 +77,4 @@ cd frontend-svelte && npm run dev  # Frontend on :5173
 
 ## License
 
-MIT
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
